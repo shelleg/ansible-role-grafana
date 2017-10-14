@@ -1,0 +1,36 @@
+---
+- name: "Create/Update grafana directories"
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_group }}"
+    mode: 0755
+  become: yes
+  with_items:
+    - "{{ grafana_dir_conf }}"
+    - "{{ grafana_dir_data }}"
+    - "{{ grafana_dir_home }}"
+    - "{{ grafana_dir_log }}"
+    - "{{ grafana_dir_pid }}"
+    - "{{ grafana_dir_plugins }}"
+    - "{{ grafana_dir_dashboards }}"
+
+- name: "Set/Update grafana ini file"
+  template:
+    src: grafana.ini.j2
+    dest: "{{ grafana_conf_file }}"
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_group }}"
+    mode: 0644
+  become: yes
+  register: ini
+
+- name: "Set/Update grafana config file"
+  template:
+    src: grafana-server.j2
+    dest: "{{ grafana_defaults_file }}"
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_group }}"
+    mode: 0644
+  register: defaults

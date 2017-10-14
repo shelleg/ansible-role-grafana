@@ -1,0 +1,11 @@
+---
+- name: "Include {{ ansible_os_family }} tasks"
+  include: "install-{{ ansible_os_family }}.yml"
+
+- name: "Install grafana packages"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ grafana_packages }}"
+  register: install_packages

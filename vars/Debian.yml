@@ -1,0 +1,9 @@
+---
+grafana_ubuntu_dist: wheezy
+grafana_repo: "deb https://packagecloud.io/grafana/stable/{{ ansible_os_family | lower }}/ {{ grafana_ubuntu_dist }} main"
+grafana_defaults_file: /etc/default/grafana-server
+grafana_service_name: grafana
+grafana_cli: grafana
+grafana_packages:
+  - grafana
+  - apt-transport-https

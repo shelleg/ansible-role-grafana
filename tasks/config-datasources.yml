@@ -1,0 +1,29 @@
+---
+
+- name: "Check if prometheus datasource exists"
+  uri:
+    url: "http://{{ grafana_hostname | d('localhost') }}:{{ grafana_http_port }}/api/datasources/name/Prometheus"
+    user: "{{ grafana_admin_user }}"
+    password: "{{ grafana_admin_password }}"
+    force_basic_auth: yes
+  register: grafana_prometheus
+  failed_when: false
+  changed_when: false
+  when: grafana_prometehus
+
+- name: "Configure Prometheus Datasource"
+  uri:
+    url: "http://{{ grafana_hostname | d('localhost') }}:{{ grafana_http_port }}/api/datasources"
+    method: POST
+    user: "{{ grafana_admin_user }}"
+    password: "{{ grafana_admin_password }}"
+    body:
+      name: "Prometheus"
+      type: "prometheus"
+      url: "http://{{ proemtheus_hostname | d('localhost') }}:9090"
+      access: "proxy"
+      isDefault: true
+    force_basic_auth: yes
+    status_code: 200
+    body_format: json
+  when: grafana_prometehus and grafana_prometheus.status == 404

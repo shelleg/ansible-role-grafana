@@ -1,0 +1,8 @@
+---
+grafana_repo: https://packagecloud.io/grafana/stable/el/$releasever/$basearch
+grafana_repo_key: https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana
+grafana_defaults_file: /etc/sysconfig/grafana-server
+grafana_service_name: grafana-server
+grafana_cli: grafana-cli
+grafana_packages:
+  - grafana

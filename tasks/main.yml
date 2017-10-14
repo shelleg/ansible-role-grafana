@@ -1,0 +1,30 @@
+---
+
+- name: "Include {{ ansible_os_family }} vars"
+  include_vars: "{{ ansible_os_family }}.yml"
+
+
+- name: "Install grafana"
+  include: "install.yml"
+
+- name: "Configure grafana"
+  include: "config.yml"
+
+- name: "Enable and (re)start grafana service"
+  service:
+    name: "{{ grafana_service_name }}"
+    enabled: yes
+    state: restarted
+
+- name: "Wait for grafana to start"
+  wait_for:
+    port: "{{ grafana_http_port }}"
+
+- name: "Install plugins"
+  include: "install-plugins.yml"
+
+- name: "Configure Datasources"
+  include: "config-datasources.yml"
+
+- name: "Configure Dashboards"
+  include: "config-dashboards.yml"

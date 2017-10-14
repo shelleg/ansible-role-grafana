@@ -1,0 +1,35 @@
+---
+
+- name: "Copy dashbaords from file dir to {{ grafana_dir_dashboards }}"
+# TODO: replace with git pull of a dashboards repo
+  copy:
+    src: "{{ item }}"
+    dest: "{{ grafana_dir_dashboards }}/{{ item }}"
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_group }}"
+    mode: 0755
+  with_items:
+    - data-exploration.json
+    - prometehus-stats.json
+    - docker-host-and-container-overview.json
+    - docker-and-system-monitoring.json
+    - prometheus-stats-extended.json
+    - traefik-dashbaord.json
+  when: grafana_prometehus
+  notify: restart grafana
+
+  # - name: "load prometheus grafana dashbaords"
+  #   uri:
+  #     url: "http://localhost:{{ grafana_http_port }}/api/dashboards/db"
+  #     method: POST
+  #     user: "{{ grafana_admin_user }}"
+  #     password: "{{ grafana_admin_password }}"
+  #     body: "{{ lookup('file','{{ item }}') }}"
+  #     body_format: "json"
+  #     force_basic_auth: yes
+  #     status_code: 200
+  #     HEADER_Content-type: application/json
+  #   with_items:
+  #     - data-exploration.json
+  #     - stats.json
+    # when: grafana_prometehus

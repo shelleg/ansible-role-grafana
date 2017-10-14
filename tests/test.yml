@@ -1,0 +1,29 @@
+---
+- hosts: centos,ubuntu
+  become: true
+  vars:
+    cratedb_adapter_testing: true
+    cratedb_adapter_prometheus_init: true
+    prometheus_cratedb_remote_write: true
+    prometheus_cratedb_remote_read: true
+    prometheus_components:
+      - alertmanager
+      - node_exporter
+      - prometheus
+      - crate_adapter
+    promehtues_use_role_rules: true
+    prometheus_static_targets:
+    - {
+      name: traefik,
+      host: traefik.mydomain.com,
+      port: 8080,
+      metrics_path: /metrics
+      }
+    grafana_prometehus: true
+
+  roles:
+    - role: shelleg.epel
+      when: ansible_os_family == 'RedHat'
+    - role: shelleg.cratedb
+    - role: shelleg.prometheus
+    - role: shelleg.grafana

@@ -1,0 +1,13 @@
+---
+- name: "Import apt key"
+  apt_key:
+    url: https://packagecloud.io/gpg.key
+    id: D59097AB
+    state: present
+  become: yes
+
+- name: "Enable apt repository"
+  apt_repository:
+    repo: "{{ grafana_repo }}"
+    update_cache: yes
+    state: present
